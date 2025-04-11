@@ -1,0 +1,36 @@
+name: Deploy Microservices via Terraform & Unified Helm
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.6.6
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.27.0'
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v3
+
+    - name: Apply Terraform
+      working-directory: infra
+      run: |
+        terraform init
+        terraform apply -auto-approve
+
+    - name: Destroy Terraform
+      working-directory: infra
+      run: terraform destroy -auto-approve
