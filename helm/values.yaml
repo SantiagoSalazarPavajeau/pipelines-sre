@@ -1,0 +1,9 @@
+image:
+  repository: nginx
+  tag: latest
+
+service:
+  port: 80
+
+deployment:
+  name: app
